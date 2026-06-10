@@ -49,16 +49,22 @@ const createStudent = async (req, res) => {
   //#swagger.tags=["students"]
   try {
     if (
-      !req.body.destinationId ||
-      !req.body.travelDate ||
-      !req.body.numberOfPeople
+      !req.body.firstName ||
+      !req.body.lastName ||
+      !req.body.phoneNumber ||
+      !req.body.englishLevel ||
+      !req.body.dateOfBirth ||
+      !req.body.registrationDate 
     ) {
       return res.status(400).json({ message: "All fields required" });
     }
     const createAstudent = {
-      destinationId: req.body.destinationId,
-      travelDate: req.body.travelDate,
-      numberOfPeople: req.body.numberOfPeople,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+      englishLevel: req.body.englishLevel,
+      dateOfBirth: req.body.dateOfBirth,
+      registrationDate: req.body.registrationDate,
     };
     const result = await mongodb
       .getDatabase()
@@ -85,9 +91,12 @@ const updateStudent = async (req, res) => {
     }
     const studentId = new ObjectId(req.params.id);
     const student = {
-      destinationId: req.body.destinationId,
-      travelDate: req.body.travelDate,
-      numberOfPeople: req.body.numberOfPeople,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+      englishLevel: req.body.englishLevel,
+      dateOfBirth: req.body.dateOfBirth,
+      registrationDate: req.body.registrationDate,
     };
     const response = await mongodb
       .getDatabase()
