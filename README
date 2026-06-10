@@ -1,0 +1,10 @@
+## Team Contributions
+
+### Job Oboth
+- Created database connection
+- Built CRUD operations for Courses
+- Built CRUD operations for Lessons
+- Implemented Swagger documentation
+- Designed initial API structure
+- Created MongoDB collections
+- Tested endpoints
