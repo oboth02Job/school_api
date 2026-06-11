@@ -26,10 +26,10 @@ const getSingleCourse = async (req, res) => {
       res.status(400).json({ message: "Invalid course ID" });
     } 
      const courseId = new ObjectId(req.params.id);
-     const result = await mongodb
-       .getDatabase()
-       .collection("courses")
-       .findOne({ _id: courseId },);
+    const result = await mongodb
+      .getDatabase()
+      .collection("courses")
+      .findOne({ _id: req.params.id });
     if (!result) {
       return res.status(404).json({ message: "Course not found" });
     }
@@ -85,10 +85,6 @@ const createCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
   //#swagger.tags=["courses"]
   try {
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid Course ID" });
-    }
-    const courseId = new ObjectId(req.params.id);
     const Course = {
       courseName: req.body.courseName,
       description: req.body.description,
@@ -99,10 +95,11 @@ const updateCourse = async (req, res) => {
     const response = await mongodb
       .getDatabase()
       .collection("courses")
-      .replaceOne({ _id: courseId }, Course);
+      .replaceOne({ _id: req.params.id }, Course);
+
 
     if (response.matchedCount === 0) {
-      res.status(404).json({ message: "Course not found" });
+     return res.status(404).json({ message: "Course not found" });
     }
     res.status(200).json({ message: "Course updated successfully" });
   } catch (error) {
@@ -115,15 +112,11 @@ const updateCourse = async (req, res) => {
 const deleteCourse = async (req, res) => {
   //#swagger.tags=["courses"]
   try {
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid Course ID" });
-    }
-    const courseId = new ObjectId(req.params.id);
 
     const response = await mongodb
       .getDatabase()
       .collection("courses")
-      .deleteOne({ _id: courseId });
+      .deleteOne({ _id: req.params.id });
     if (response.deletedCount === 0) {
        return res.status(404).json({ message: "Course not found" });
     }

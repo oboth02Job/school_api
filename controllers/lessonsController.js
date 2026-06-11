@@ -21,15 +21,11 @@ const getAllLessons = async (req, res) => {
 const getSingleLesson = async (req, res) => {
   //#swagger.tags=["Lessons"]
   try {
-    const id = req.params.id;
-    if (!ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Invalid lesson ID" });
-    }
-    const lessonId = new ObjectId(req.params.id);
+   
     const result = await mongodb
       .getDatabase()
       .collection("lessons")
-      .findOne({ _id: lessonId });
+      .findOne({ _id: req.params.id });
     if (!result) {
       return res.status(404).json({ message: "Lesson not found" });
     }
@@ -82,21 +78,16 @@ const createLesson = async (req, res) => {
 const updateLesson = async (req, res) => {
   //#swagger.tags=["Lessons"]
   try {
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid lesson ID" });
-    }
-    const lessonId = new ObjectId(req.params.id);
-    const lesson = {
+    const 
+    lesson = {
       title: req.body.title,
       courseId: req.body.courseId,
       lessonNumber: req.body.lessonNumber,
       durationMinutes: req.body.durationMinutes,
       topic: req.body.topic,
-    };
-    const response = await mongodb
-      .getDatabase()
-      .collection("lessons")
-      .replaceOne({ _id: lessonId }, lesson);
+      };
+    
+    const response = await mongodb.getDatabase().collection("lessons").replaceOne({ _id: req.params.id }, lesson);
 
     if (response.matchedCount === 0) {
       res.status(404).json({ message: "Lesson not found" });
@@ -112,15 +103,10 @@ const updateLesson = async (req, res) => {
 const deleteLesson = async (req, res) => {
   //#swagger.tags=["Lessons"]
   try {
-    if (!ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid lesson ID" });
-    }
-    const lessonId = new ObjectId(req.params.id);
-
     const response = await mongodb
       .getDatabase()
       .collection("lessons")
-      .deleteOne({ _id: lessonId });
+      .deleteOne({ _id: req.params.id });
     if (response.deletedCount === 0) {
       return res.status(404).json({ message: "Lesson not found" });
     }
