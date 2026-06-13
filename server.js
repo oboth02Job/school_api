@@ -7,10 +7,38 @@ const studentRoutes = require("./routes/studentRoutes");
 const dotenv = require("dotenv").config();
 const mongodb = require("./data/database");
 const cors = require("cors")
+const passport = require("passport");
+const session = require("express-session");
+const githubStrategy = require("passport-github2").Strategy;
+require("./config/passport");
+const authRoutes = require("./routes/authRoutes");
 
+
+app.use(
+  session({
+    secret: "mySecretKey",
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+
+passport.serializeUser((user, done) => {
+  console.log("serializeUser called");
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  console.log("deserializeUser called");
+  done(null, user);
+});
 
 app.use(cors());
 app.use(express.json());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
     res.send("Hello from Server")
