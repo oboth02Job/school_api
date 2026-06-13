@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000;
 const coursesRoutes = require("./routes/coursesRoutes");
 const lessonsRoutes = require("./routes/lessonsRoutes");
 const studentRoutes = require("./routes/studentRoutes");
@@ -14,23 +14,18 @@ require("./config/passport");
 const authRoutes = require("./routes/authRoutes");
 
 
+app.set("trust proxy", 1);
 app.use(
   session({
-    secret: "mySecretKey",
+    secret: process.env.mySecretKey,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: true,
+      httpOnly: true
+    }
   }),
 );
-
-passport.serializeUser((user, done) => {
-  console.log("serializeUser called");
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  console.log("deserializeUser called");
-  done(null, user);
-});
 
 app.use(cors());
 app.use(express.json());
