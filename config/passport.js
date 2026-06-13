@@ -9,8 +9,8 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
       (accessToken, refreshToken, profile, done) => {
-          console.log("ACCESS TOKEN:", accessToken)
-           console.log("PROFILE:", profile);
+          console.log("****GITHUB PROFILE RECIEVED*****")
+           console.log(profile);
       return done(null, profile);
     },
   ),
